@@ -8,9 +8,9 @@ export class OffersService {
     return 'This action adds a new offer';
   }
 
-  findAll() {
-    return `This action returns all offers`;
-  }
+  // findAll() {
+  //   return `This action returns all offers`;
+  // }
 
   findOne(id: number) {
     return `This action returns a #${id} offer`;

@@ -9,12 +9,13 @@ import {
   JoinTable,
 } from 'typeorm';
 import { Wish } from 'src/wishes/entities/wish.entity';
-import { IsDate, IsString, IsUrl, Length } from 'class-validator';
+import { IsDate, IsInt, IsString, IsUrl, Length } from 'class-validator';
 import { User } from 'src/users/entities/user.entity';
 
 @Entity()
 export class Wishlist {
   @PrimaryGeneratedColumn()
+  @IsInt()
   id: number;
 
   @CreateDateColumn()

@@ -1,4 +1,11 @@
-import { IsDate, IsEmail, IsString, IsUrl, Length } from 'class-validator';
+import {
+  IsDate,
+  IsEmail,
+  IsInt,
+  IsString,
+  IsUrl,
+  Length,
+} from 'class-validator';
 import {
   Entity,
   CreateDateColumn,
@@ -14,6 +21,7 @@ import { Wishlist } from 'src/wishlists/entities/wishlist.entity';
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
+  @IsInt()
   id: number;
 
   @CreateDateColumn()
@@ -29,17 +37,16 @@ export class User {
   @Length(2, 30)
   username: string;
 
-  @Column()
+  @Column({ default: 'Пока ничего не рассказал о себе' })
   @IsString()
   @Length(2, 200)
   about: string;
 
-  @Column()
+  @Column({ default: 'https://i.pravatar.cc/300' })
   @IsUrl()
   avatar: string;
 
   @Column()
-  @IsString()
   @IsEmail()
   email: string;
 

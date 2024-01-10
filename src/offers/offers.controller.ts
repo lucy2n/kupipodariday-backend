@@ -20,10 +20,10 @@ export class OffersController {
     return this.offersService.create(createOfferDto);
   }
 
-  @Get()
-  findAll() {
-    return this.offersService.findAll();
-  }
+  // @Get()
+  // findAll() {
+  //   return this.offersService.findAll();
+  // }
 
   @Get(':id')
   findOne(@Param('id') id: string) {

@@ -4,16 +4,16 @@ import {
   UpdateDateColumn,
   PrimaryGeneratedColumn,
   Column,
-  OneToMany,
   ManyToOne,
 } from 'typeorm';
 import { Wish } from 'src/wishes/entities/wish.entity';
 import { User } from 'src/users/entities/user.entity';
-import { IsBoolean, IsDate } from 'class-validator';
+import { IsBoolean, IsDate, IsInt } from 'class-validator';
 
 @Entity()
 export class Offer {
   @PrimaryGeneratedColumn()
+  @IsInt()
   id: number;
 
   @CreateDateColumn()
@@ -27,13 +27,17 @@ export class Offer {
   @ManyToOne(() => User, (user) => user.offers)
   user: User;
 
-  @Column()
+  @ManyToOne(() => Wish, (wish) => wish.offers)
   item: Wish;
 
-  @Column()
+  @Column({
+    type: 'decimal',
+    precision: 10,
+    scale: 2,
+  })
   amount: number;
 
-  @Column()
+  @Column({ default: false })
   @IsBoolean()
   hidden: boolean;
 }

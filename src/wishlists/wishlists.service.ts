@@ -8,9 +8,9 @@ export class WishlistsService {
     return 'This action adds a new wishlist';
   }
 
-  findAll() {
-    return `This action returns all wishlists`;
-  }
+  // findAll() {
+  //   return `This action returns all wishlists`;
+  // }
 
   findOne(id: number) {
     return `This action returns a #${id} wishlist`;
