@@ -1,19 +1,19 @@
 import {
   Controller,
   Get,
-  Post,
   Body,
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 import { Wish } from 'src/wishes/entities/wish.entity';
 import { WishesService } from 'src/wishes/wishes.service';
 import { AuthUser } from 'src/common/decorators/user.decorator';
+import { JwtAuthGuard } from 'src/auth/guard/jwt-auth.guard';
 
 @Controller('users')
 export class UsersController {
@@ -22,16 +22,17 @@ export class UsersController {
     private readonly wishesService: WishesService,
   ) {}
 
-  @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.signup(createUserDto);
-  }
+  // @Post()
+  // create(@Body() createUserDto: CreateUserDto) {
+  //   return this.usersService.signup(createUserDto);
+  // }
 
   // @Get()
   // findAll() {
   //   return this.usersService.findAll();
   // }
 
+  @UseGuards(JwtAuthGuard)
   @Get('me')
   async findOwn(@AuthUser() user: User): Promise<User> {
     return this.usersService.findOne({
@@ -59,6 +60,7 @@ export class UsersController {
   // }
 
   @Patch('me')
+  // @UseFilters(EntityNotFoundError)
   async updateOne(
     @AuthUser() user: User,
     @Body() updateUserDto: UpdateUserDto,

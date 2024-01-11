@@ -2,6 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { TypeOrmModuleOptions, TypeOrmOptionsFactory } from '@nestjs/typeorm';
 import { join } from 'path';
+import { Offer } from 'src/offers/entities/offer.entity';
+import { User } from 'src/users/entities/user.entity';
+import { Wish } from 'src/wishes/entities/wish.entity';
+import { Wishlist } from 'src/wishlists/entities/wishlist.entity';
 
 @Injectable()
 export class DatabaseConfigFactory implements TypeOrmOptionsFactory {
@@ -11,10 +15,10 @@ export class DatabaseConfigFactory implements TypeOrmOptionsFactory {
       type: 'postgres',
       host: this.configService.get<string>('database.host'),
       port: this.configService.get<number>('database.port'),
-      username: this.configService.get<string>('database.user'),
+      username: this.configService.get<string>('database.username'),
       password: this.configService.get<string>('database.password'),
-      database: this.configService.get<string>('database.name'),
-      entities: [join(__dirname, '../**/*.entityf.ts,-js}')],
+      database: this.configService.get<string>('database.database'),
+      entities: [User, Wish, Offer, Wishlist],
       synchronize: true,
     };
   }

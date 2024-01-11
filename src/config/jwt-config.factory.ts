@@ -6,7 +6,7 @@ import { JwtModuleOptions } from '@nestjs/jwt/dist';
 @Injectable()
 export class JwtConfigFactory implements JwtOptionsFactory {
   constructor(private configService: ConfigService) {}
-  createJwtOptions(): JwtModuleOptions | Promise<JwtModuleOptions> {
+  createJwtOptions(): JwtModuleOptions {
     return {
       secret: this.configService.get<string>('jwt.secret'),
       signOptions: {

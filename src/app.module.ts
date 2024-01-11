@@ -9,6 +9,7 @@ import configuration from './config/configuration';
 import { DatabaseConfigFactory } from './config/database-config.factory';
 import { ConfigModule } from '@nestjs/config';
 import { AppService } from './app.service';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { AppService } from './app.service';
     WishesModule,
     WishlistsModule,
     OffersModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

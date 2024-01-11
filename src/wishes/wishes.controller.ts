@@ -1,22 +1,24 @@
 import {
   Controller,
-  Get,
   Post,
   Body,
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { WishesService } from './wishes.service';
 import { CreateWishDto } from './dto/create-wish.dto';
 import { UpdateWishDto } from './dto/update-wish.dto';
 import { AuthUser } from 'src/common/decorators/user.decorator';
+import { JwtAuthGuard } from 'src/auth/guard/jwt-auth.guard';
 
 @Controller('wishes')
 export class WishesController {
   constructor(private readonly wishesService: WishesService) {}
 
   @Post()
+  @UseGuards(JwtAuthGuard)
   async create(@Body() createWishDto: CreateWishDto, @AuthUser() user) {
     return this.wishesService.create(createWishDto, user.id);
   }

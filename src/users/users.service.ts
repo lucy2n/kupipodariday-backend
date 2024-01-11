@@ -5,6 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { Repository, FindOneOptions } from 'typeorm';
 import { hashValue } from 'src/helpers/hash';
+
 @Injectable()
 export class UsersService {
   constructor(
@@ -12,9 +13,9 @@ export class UsersService {
     private usersRepository: Repository<User>,
   ) {}
 
-  async signup(createUserDto: CreateUserDto): Promise<User> {
+  async create(createUserDto: CreateUserDto): Promise<User> {
     const { password } = createUserDto;
-    const user = await this.usersRepository.create({
+    const user = this.usersRepository.create({
       ...createUserDto,
       password: await hashValue(password),
     });
@@ -43,7 +44,7 @@ export class UsersService {
     return this.usersRepository.find();
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async remove(id: number): Promise<void> {
+    await this.usersRepository.delete(id);
   }
 }

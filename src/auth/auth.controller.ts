@@ -1,4 +1,3 @@
-import { instanceToPlain } from 'class-transformer';
 import { LocalAuthGuard } from './guard/local-auth.guard';
 import { AuthUser } from 'src/common/decorators/user.decorator';
 import { UsersService } from 'src/users/users.service';
@@ -22,7 +21,7 @@ export class AuthController {
 
   @Post('signup')
   async signup(@Body() createUserDto: CreateUserDto) {
-    const user = await this.usersService.signup(createUserDto);
-    return instanceToPlain(user);
+    const user = await this.usersService.create(createUserDto);
+    return user;
   }
 }
