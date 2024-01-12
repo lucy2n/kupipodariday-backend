@@ -16,7 +16,22 @@ export class WishesService {
   async create(createWishDto: CreateWishDto, userId: number) {
     const owner = await this.userService.findById(userId);
     const wish = await this.whishRepository.create({ ...createWishDto, owner });
-    return this.whishRepository.create(createWishDto);
+
+    return this.whishRepository.save(wish);
+  }
+
+  async findLastWishes(): Promise<Wish[]> {
+    return this.whishRepository.find({
+      order: { createdAt: 'DESC' },
+      take: 40,
+    });
+  }
+
+  async findTopWishes(): Promise<Wish[]> {
+    return this.whishRepository.find({
+      order: { copied: 'DESC' },
+      take: 20,
+    });
   }
 
   // findAll() {

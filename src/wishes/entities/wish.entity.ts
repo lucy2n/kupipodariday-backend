@@ -53,16 +53,16 @@ export class Wish {
   })
   raised: number;
 
-  @ManyToOne(() => User, (user) => user.wishes)
-  owner: User;
-
   @Column()
   @Length(1, 1024)
   description: string;
 
+  @ManyToOne(() => User, (user) => user.wishes)
+  owner: User;
+
   @OneToMany(() => Offer, (offer) => offer.item)
   offers: Offer[];
 
-  @Column()
+  @Column({ default: 0 })
   copied: number;
 }

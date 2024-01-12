@@ -2,6 +2,7 @@ import {
   Controller,
   Post,
   Body,
+  Get,
   Patch,
   Param,
   Delete,
@@ -21,6 +22,16 @@ export class WishesController {
   @UseGuards(JwtAuthGuard)
   async create(@Body() createWishDto: CreateWishDto, @AuthUser() user) {
     return this.wishesService.create(createWishDto, user.id);
+  }
+
+  @Get('last')
+  async findLast() {
+    return this.wishesService.findLastWishes();
+  }
+
+  @Get('top')
+  async findTop() {
+    return this.wishesService.findLastWishes();
   }
 
   // @Get()
