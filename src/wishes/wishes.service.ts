@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateWishDto } from './dto/create-wish.dto';
 import { UpdateWishDto } from './dto/update-wish.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -34,22 +34,41 @@ export class WishesService {
     });
   }
 
-  // findAll() {
-  //   return `This action returns all wishes`;
-  // }
+  async findWishById(id: number): Promise<Wish> {
+    return await this.whishRepository.findOne({
+      where: { id },
+      relations: { owner: true, offers: true },
+    });
+  }
 
-  async findWishById(ownerId: number) {
+  async findUsersWish(ownerId: number) {
     return await this.whishRepository.find({
       where: { owner: { id: ownerId } },
       relations: ['owner'],
     });
   }
 
-  update(id: number, updateWishDto: UpdateWishDto) {
-    return `This action updates a #${id} wish`;
+  async updateWish(id: number, updateUserDto: UpdateWishDto, userId: number) {
+    const wish = await this.findWishById(id);
+    if (!wish) {
+      throw new NotFoundException('Подарок не найден');
+    }
+    if (userId !== wish.owner.id) {
+      throw new NotFoundException(
+        'Чужие подарки недоступны для редактирования',
+      );
+    }
+    return this.whishRepository.save({ ...wish, ...updateUserDto });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} wish`;
+  async removeWish(id: number, userId: number) {
+    const wish = await this.findWishById(id);
+    if (!wish) {
+      throw new NotFoundException('Подарок не найден');
+    }
+    if (userId !== wish.owner.id) {
+      throw new NotFoundException('Чужие подарки недоступны для удаления');
+    }
+    return this.whishRepository.remove(wish);
   }
 }

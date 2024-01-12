@@ -48,7 +48,7 @@ export class UsersController {
 
   @Get('me/wishes')
   async findMyWishes(@AuthUser() user: User): Promise<Wish[]> {
-    return await this.wishesService.findWishById(user.id);
+    return await this.wishesService.findUsersWish(user.id);
   }
 
   @Get(':username')
