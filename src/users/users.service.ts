@@ -27,7 +27,7 @@ export class UsersService {
     return user;
   }
 
-  findOne(query: FindOneOptions<User>) {
+  async findOne(query: FindOneOptions<User>) {
     return this.usersRepository.findOneOrFail(query);
   }
 

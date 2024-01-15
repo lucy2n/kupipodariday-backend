@@ -1,12 +1,12 @@
 import {
   Controller,
   Get,
-  Post,
   Body,
   Patch,
   Param,
   Delete,
   UseGuards,
+  Post,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -15,7 +15,6 @@ import { Wish } from 'src/wishes/entities/wish.entity';
 import { WishesService } from 'src/wishes/wishes.service';
 import { AuthUser } from 'src/common/decorators/user.decorator';
 import { JwtAuthGuard } from 'src/auth/guard/jwt-auth.guard';
-import { FindUserDto } from './dto/find-users.dto';
 
 @UseGuards(JwtAuthGuard)
 @Controller('users')
@@ -86,10 +85,21 @@ export class UsersController {
     return this.usersService.update(id, updateUserDto);
   }
 
-  // @Post('find')
-  // async findByQuery(@Param('query') query: string) {
-  //   this
-  // }
+  @Post('find')
+  async findByQuery(@Param('query') query: string) {
+    return this.usersService.findOne({
+      where: { username: query } || { email: query },
+      select: {
+        email: true,
+        username: true,
+        id: true,
+        avatar: true,
+        about: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
+  }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
