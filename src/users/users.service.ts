@@ -5,6 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { Repository, FindOneOptions } from 'typeorm';
 import { hashValue } from 'src/helpers/hash';
+import { FindUserDto } from './dto/find-users.dto';
 
 @Injectable()
 export class UsersService {
@@ -24,6 +25,9 @@ export class UsersService {
 
   async findById(id: number): Promise<User> {
     const user = await this.usersRepository.findOneBy({ id });
+    if (!user) {
+      throw new NotFoundException('Такого пользователя нет');
+    }
     return user;
   }
 
@@ -44,8 +48,18 @@ export class UsersService {
     return this.usersRepository.save({ ...user, ...updateUserDto });
   }
 
-  async findAll(): Promise<User[]> {
-    return this.usersRepository.find();
+  // async findAll(): Promise<User[]> {
+  //   return this.usersRepository.find();
+  // }
+
+  async findMany({ query }: FindUserDto): Promise<User[]> {
+    const user = await this.usersRepository.find({
+      where: [{ username: query }, { email: query }],
+    });
+    if (!user) {
+      throw new NotFoundException('Такого пользователя нет');
+    }
+    return user;
   }
 
   async remove(id: number): Promise<void> {

@@ -24,10 +24,10 @@ export class UsersController {
     private readonly wishesService: WishesService,
   ) {}
 
-  @Get()
-  findMany() {
-    return this.usersService.findAll();
-  }
+  // @Get()
+  // find() {
+  //   return this.usersService.findAll();
+  // }
 
   //Метод для получения авторизованного пользователя
   @Get('me')
@@ -86,19 +86,8 @@ export class UsersController {
   }
 
   @Post('find')
-  async findByQuery(@Param('query') query: string) {
-    return this.usersService.findOne({
-      where: { username: query } || { email: query },
-      select: {
-        email: true,
-        username: true,
-        id: true,
-        avatar: true,
-        about: true,
-        createdAt: true,
-        updatedAt: true,
-      },
-    });
+  async findByQuery(@Body('query') query: string) {
+    return this.usersService.findMany({ query });
   }
 
   @Delete(':id')
