@@ -30,6 +30,7 @@ export class UsersController {
     return this.usersService.findAll();
   }
 
+  //Метод для получения авторизованного пользователя
   @Get('me')
   async findOwn(@AuthUser() user: User): Promise<User> {
     return this.usersService.findOne({
@@ -48,9 +49,17 @@ export class UsersController {
 
   @Get('me/wishes')
   async findMyWishes(@AuthUser() user: User): Promise<Wish[]> {
-    return await this.wishesService.findUsersWish(user.id);
+    return await this.wishesService.findUsersWishes(user.id);
   }
 
+  @Get(':username/wishes')
+  async findWishesByUsername(
+    @Param('username') username: string,
+  ): Promise<Wish[]> {
+    return await this.wishesService.findWishesByUsername(username);
+  }
+
+  //Метод для получения пользователя по юзернейму
   @Get(':username')
   async findByUsername(@Param('username') username: string): Promise<User> {
     return this.usersService.findOne({
@@ -67,6 +76,7 @@ export class UsersController {
     });
   }
 
+  //Метод для изменения данных авторизованного пользователя
   @Patch('me')
   async updateOne(
     @AuthUser() user: User,

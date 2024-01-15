@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -34,10 +34,14 @@ export class UsersService {
   async update(id: number, updateUserDto: UpdateUserDto) {
     const { password } = updateUserDto;
     const user = await this.findById(id);
+    if (!user) {
+      throw new NotFoundException('Такого пользователя нет');
+    }
     if (password) {
       updateUserDto.password = await hashValue(password);
       return this.usersRepository.save({ ...user, ...updateUserDto });
     }
+    return this.usersRepository.save({ ...user, ...updateUserDto });
   }
 
   async findAll(): Promise<User[]> {

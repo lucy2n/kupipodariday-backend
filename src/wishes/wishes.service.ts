@@ -41,9 +41,23 @@ export class WishesService {
     });
   }
 
-  async findUsersWish(ownerId: number) {
+  async findWishesById(id: number): Promise<Wish> {
+    return await this.whishRepository.findOne({
+      where: { id },
+      relations: { owner: true, offers: true },
+    });
+  }
+
+  async findUsersWishes(ownerId: number): Promise<Wish[]> {
     return await this.whishRepository.find({
       where: { owner: { id: ownerId } },
+      relations: ['owner'],
+    });
+  }
+
+  async findWishesByUsername(username: string): Promise<Wish[]> {
+    return await this.whishRepository.find({
+      where: { owner: { username: username } },
       relations: ['owner'],
     });
   }
