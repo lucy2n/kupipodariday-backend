@@ -42,37 +42,47 @@ export class WishesService {
   async findWishById(id: number): Promise<Wish> {
     return await this.wishRepository.findOne({
       where: { id },
-      relations: ['owner', 'offers'],
+      relations: {
+        owner: true,
+        offers: true,
+      },
     });
   }
 
   async findWishesById(id: number): Promise<Wish> {
     return await this.wishRepository.findOne({
       where: { id },
-      relations: { owner: true, offers: true },
+      relations: {
+        owner: true,
+        offers: true,
+      },
     });
   }
 
   async findUsersWishes(ownerId: number): Promise<Wish[]> {
     return await this.wishRepository.find({
       where: { owner: { id: ownerId } },
-      relations: ['owner'],
+      relations: {
+        owner: true,
+      },
     });
   }
 
   async findWishesByUsername(username: string): Promise<Wish[]> {
     return await this.wishRepository.find({
       where: { owner: { username: username } },
-      relations: ['owner'],
+      relations: {
+        owner: true,
+      },
     });
   }
 
-  async updateWish(id: number, updateUserDto: UpdateWishDto, userId: number) {
+  async updateWish(id: number, updateWishDto: UpdateWishDto, userId: number) {
     const wish = await this.findWishById(id);
     if (!wish) {
       throw new NotFoundException('Подарок не найден');
     }
-    if (wish.raised > 0 && updateUserDto.price > 0) {
+    if (wish.raised > 0 && updateWishDto.price > 0) {
       throw new NotAcceptableException(
         'Нельзя изменить стоимость подарка, потому что уже есть желающие скинуться.',
       );
@@ -82,7 +92,7 @@ export class WishesService {
         'Чужие подарки недоступны для редактирования',
       );
     }
-    return this.wishRepository.save({ ...wish, ...updateUserDto });
+    return this.wishRepository.save({ ...wish, ...updateWishDto });
   }
 
   // TODO: Добелать функцию
@@ -108,7 +118,7 @@ export class WishesService {
       throw new NotFoundException('Подарок не найден');
     }
     if (userId !== wish.owner.id) {
-      throw new NotFoundException('Чужие подарки недоступны для удаления');
+      throw new NotAcceptableException('Чужие подарки недоступны для удаления');
     }
     return this.wishRepository.remove(wish);
   }

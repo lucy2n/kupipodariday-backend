@@ -26,6 +26,7 @@ export class WishlistsController {
     @Body() createWishDto: CreateWishlistDto,
     @AuthUser() user,
   ): Promise<Wishlist> {
+    console.log(user, 'user');
     return this.wishlistsService.create(createWishDto, user.id);
   }
 
@@ -36,21 +37,29 @@ export class WishlistsController {
   }
 
   @Get(':id')
+  @UseGuards(JwtAuthGuard)
   findOne(@Param('id') id: number): Promise<Wishlist> {
     return this.wishlistsService.findWishlistById(id);
   }
 
   @Patch(':id')
+  @UseGuards(JwtAuthGuard)
   update(
     @Param('id') id: string,
     @Body() updateWishlistDto: UpdateWishlistDto,
+    @AuthUser() user: User,
   ) {
-    return this.wishlistsService.update(+id, updateWishlistDto);
+    console.log(user);
+    return this.wishlistsService.updateWishlist(
+      +id,
+      updateWishlistDto,
+      user.id,
+    );
   }
 
   @Delete(':id')
   @UseGuards(JwtAuthGuard)
   remove(@Param('id') id: number, @AuthUser() user: User) {
-    return this.wishlistsService.removeWish(id, user.id);
+    return this.wishlistsService.removeWishlist(id, user.id);
   }
 }

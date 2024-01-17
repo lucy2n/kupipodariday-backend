@@ -43,7 +43,6 @@ export class UsersService {
     }
     if (password) {
       updateUserDto.password = await hashValue(password);
-      return this.usersRepository.save({ ...user, ...updateUserDto });
     }
     return this.usersRepository.save({ ...user, ...updateUserDto });
   }
