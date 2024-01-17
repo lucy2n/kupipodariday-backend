@@ -17,4 +17,7 @@ export class CreateWishDto {
 
   @IsOptional()
   raised: number;
+
+  @IsOptional()
+  copied: number;
 }

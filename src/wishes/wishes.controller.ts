@@ -60,6 +60,12 @@ export class WishesController {
     return this.wishesService.updateWish(id, updateWishDto, user.id);
   }
 
+  @Post(':id/copy')
+  @UseGuards(JwtAuthGuard)
+  copy(@Param('id') id: number, @AuthUser() user: User) {
+    return this.wishesService.copyWish(id, user);
+  }
+
   @Delete(':id')
   @UseGuards(JwtAuthGuard)
   remove(@Param('id') id: number, @AuthUser() user: User) {
