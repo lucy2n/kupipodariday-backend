@@ -18,10 +18,11 @@ export class WishesService {
     private readonly userService: UsersService,
   ) {}
 
-  async create(createWishDto: CreateWishDto, userId: number) {
-    const owner = await this.userService.findById(userId);
-    const wish = await this.wishRepository.create({ ...createWishDto, owner });
-
+  create(createWishDto: CreateWishDto, user: User): Promise<Wish> {
+    const wish = this.wishRepository.create({
+      ...createWishDto,
+      owner: user,
+    });
     return this.wishRepository.save(wish);
   }
 
@@ -98,18 +99,31 @@ export class WishesService {
   // TODO: Добелать функцию
   async copyWish(id: number, user: User) {
     const wish = await this.findWishById(id);
+    const newWish = await this.findWishById(id);
     if (!wish) {
       throw new NotFoundException('Подарок не найден');
     }
-    if (user.id !== wish.owner.id) {
+    if (user.id === wish.owner.id) {
       throw new NotAcceptableException(
         'Свои подарки недоступны для добавления',
       );
     }
-    await this.wishRepository.update(id, {
-      copied: (wish.copied += 1),
+    const isAlreadyCopied = await this.wishRepository.findOne({
+      where: {
+        owner: { id: user.id },
+        name: wish.name,
+      },
     });
-    await this.create({ ...wish, raised: 0 }, user.id);
+    if (isAlreadyCopied) {
+      throw new NotAcceptableException('Подарок уже добавлен');
+    }
+
+    wish.copied += 1;
+    await this.wishRepository.save(wish);
+
+    delete newWish.id;
+    delete newWish.offers;
+    return this.create({ ...newWish, raised: 0, copied: 0 }, user);
   }
 
   async removeWish(id: number, userId: number) {
