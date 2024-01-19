@@ -49,7 +49,6 @@ export class WishlistsController {
     @Body() updateWishlistDto: UpdateWishlistDto,
     @AuthUser() user: User,
   ) {
-    console.log(user);
     return this.wishlistsService.updateWishlist(
       +id,
       updateWishlistDto,

@@ -1,4 +1,3 @@
-import { Exclude } from 'class-transformer';
 import { IsDate, IsInt, IsString, IsUrl, Length } from 'class-validator';
 import { Offer } from 'src/offers/entities/offer.entity';
 import { User } from 'src/users/entities/user.entity';
