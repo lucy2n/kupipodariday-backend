@@ -8,14 +8,12 @@ import { UpdateWishDto } from './dto/update-wish.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Wish } from './entities/wish.entity';
 import { Repository } from 'typeorm';
-import { UsersService } from 'src/users/users.service';
 import { User } from 'src/users/entities/user.entity';
 
 @Injectable()
 export class WishesService {
   constructor(
     @InjectRepository(Wish) private readonly wishRepository: Repository<Wish>,
-    private readonly userService: UsersService,
   ) {}
 
   create(createWishDto: CreateWishDto, user: User): Promise<Wish> {
@@ -78,7 +76,11 @@ export class WishesService {
     });
   }
 
-  async updateWish(id: number, updateWishDto: UpdateWishDto, userId: number) {
+  async updateWish(
+    id: number,
+    updateWishDto: UpdateWishDto,
+    userId: number,
+  ): Promise<Wish> {
     const wish = await this.findWishById(id);
     if (!wish) {
       throw new NotFoundException('Подарок не найден');
@@ -96,8 +98,7 @@ export class WishesService {
     return this.wishRepository.save({ ...wish, ...updateWishDto });
   }
 
-  // TODO: Добелать функцию
-  async copyWish(id: number, user: User) {
+  async copyWish(id: number, user: User): Promise<Wish> {
     const wish = await this.findWishById(id);
     const newWish = await this.findWishById(id);
     if (!wish) {
@@ -126,7 +127,7 @@ export class WishesService {
     return this.create({ ...newWish, raised: 0, copied: 0 }, user);
   }
 
-  async removeWish(id: number, userId: number) {
+  async removeWish(id: number, userId: number): Promise<Wish> {
     const wish = await this.findWishById(id);
     if (!wish) {
       throw new NotFoundException('Подарок не найден');

@@ -1,39 +1,13 @@
-import {
-  IsDate,
-  IsEmail,
-  IsInt,
-  IsNotEmpty,
-  IsString,
-  IsUrl,
-  Length,
-} from 'class-validator';
-import {
-  Entity,
-  CreateDateColumn,
-  UpdateDateColumn,
-  PrimaryGeneratedColumn,
-  Column,
-  OneToMany,
-} from 'typeorm';
+import { IsEmail, IsNotEmpty, IsString, IsUrl, Length } from 'class-validator';
+import { Entity, Column, OneToMany } from 'typeorm';
 import { Wish } from 'src/wishes/entities/wish.entity';
 import { Offer } from 'src/offers/entities/offer.entity';
 import { Wishlist } from 'src/wishlists/entities/wishlist.entity';
 import { Exclude } from 'class-transformer';
+import { BaseEntity } from 'src/common/entities/base.entity';
 
 @Entity()
-export class User {
-  @PrimaryGeneratedColumn()
-  @IsInt()
-  id: number;
-
-  @CreateDateColumn()
-  @IsDate()
-  createdAt: Date;
-
-  @UpdateDateColumn()
-  @IsDate()
-  updatedAt: Date;
-
+export class User extends BaseEntity {
   @Column({ unique: true })
   @IsString()
   @IsNotEmpty()

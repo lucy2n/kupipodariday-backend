@@ -31,11 +31,11 @@ export class UsersService {
     return user;
   }
 
-  async findOne(query: FindOneOptions<User>) {
+  async findOne(query: FindOneOptions<User>): Promise<User> {
     return this.usersRepository.findOneOrFail(query);
   }
 
-  async update(id: number, updateUserDto: UpdateUserDto) {
+  async update(id: number, updateUserDto: UpdateUserDto): Promise<User> {
     const { password } = updateUserDto;
     const user = await this.findById(id);
     if (!user) {

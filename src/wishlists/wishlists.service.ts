@@ -40,7 +40,7 @@ export class WishlistsService {
     });
   }
 
-  findAll() {
+  findAll(): Promise<Wishlist[]> {
     return this.wishlistRepository.find({
       relations: {
         owner: true,
@@ -67,7 +67,7 @@ export class WishlistsService {
     id: number,
     updateWishlistDto: UpdateWishlistDto,
     userId: number,
-  ) {
+  ): Promise<Wishlist> {
     const wishlist = await this.findWishlistById(id);
     if (!wishlist) {
       throw new NotFoundException('Коллекция не найдена');
@@ -80,7 +80,7 @@ export class WishlistsService {
     return this.wishlistRepository.save({ ...wishlist, ...updateWishlistDto });
   }
 
-  async removeWishlist(id: number, userId: number) {
+  async removeWishlist(id: number, userId: number): Promise<Wishlist> {
     const wishlist = await this.findWishlistById(id);
     if (!wishlist) {
       throw new NotFoundException('Коллекция не найдена');

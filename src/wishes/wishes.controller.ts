@@ -14,6 +14,7 @@ import { UpdateWishDto } from './dto/update-wish.dto';
 import { AuthUser } from 'src/common/decorators/user.decorator';
 import { JwtAuthGuard } from 'src/auth/guard/jwt-auth.guard';
 import { User } from 'src/users/entities/user.entity';
+import { Wish } from './entities/wish.entity';
 
 @Controller('wishes')
 export class WishesController {
@@ -21,23 +22,26 @@ export class WishesController {
 
   @Post()
   @UseGuards(JwtAuthGuard)
-  async create(@Body() createWishDto: CreateWishDto, @AuthUser() user: User) {
+  async create(
+    @Body() createWishDto: CreateWishDto,
+    @AuthUser() user: User,
+  ): Promise<Wish> {
     return this.wishesService.create(createWishDto, user);
   }
 
   @Get('last')
-  async findLast() {
+  async findLast(): Promise<Wish[]> {
     return this.wishesService.findLastWishes();
   }
 
   @Get('top')
-  async findTop() {
+  async findTop(): Promise<Wish[]> {
     return this.wishesService.findLastWishes();
   }
 
   @Get(':id')
   @UseGuards(JwtAuthGuard)
-  async findWishById(@Param('id') id: number) {
+  async findWishById(@Param('id') id: number): Promise<Wish> {
     return this.wishesService.findWishById(id);
   }
 
@@ -47,19 +51,19 @@ export class WishesController {
     @Param('id') id: number,
     @AuthUser() user: User,
     @Body() updateWishDto: UpdateWishDto,
-  ) {
+  ): Promise<Wish> {
     return this.wishesService.updateWish(id, updateWishDto, user.id);
   }
 
   @Post(':id/copy')
   @UseGuards(JwtAuthGuard)
-  copy(@Param('id') id: number, @AuthUser() user: User) {
+  copy(@Param('id') id: number, @AuthUser() user: User): Promise<Wish> {
     return this.wishesService.copyWish(id, user);
   }
 
   @Delete(':id')
   @UseGuards(JwtAuthGuard)
-  remove(@Param('id') id: number, @AuthUser() user: User) {
+  remove(@Param('id') id: number, @AuthUser() user: User): Promise<Wish> {
     return this.wishesService.removeWish(id, user.id);
   }
 }

@@ -1,29 +1,11 @@
-import {
-  Entity,
-  CreateDateColumn,
-  UpdateDateColumn,
-  PrimaryGeneratedColumn,
-  Column,
-  ManyToOne,
-} from 'typeorm';
+import { Entity, Column, ManyToOne } from 'typeorm';
 import { Wish } from 'src/wishes/entities/wish.entity';
 import { User } from 'src/users/entities/user.entity';
-import { IsBoolean, IsDate, IsInt } from 'class-validator';
+import { IsBoolean } from 'class-validator';
+import { BaseEntity } from 'src/common/entities/base.entity';
 
 @Entity()
-export class Offer {
-  @PrimaryGeneratedColumn()
-  @IsInt()
-  id: number;
-
-  @CreateDateColumn()
-  @IsDate()
-  createdAt: Date;
-
-  @UpdateDateColumn()
-  @IsDate()
-  updatedAt: Date;
-
+export class Offer extends BaseEntity {
   @ManyToOne(() => User, (user) => user.offers)
   user: User;
 

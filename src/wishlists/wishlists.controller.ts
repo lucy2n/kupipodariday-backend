@@ -47,7 +47,7 @@ export class WishlistsController {
     @Param('id') id: string,
     @Body() updateWishlistDto: UpdateWishlistDto,
     @AuthUser() user: User,
-  ) {
+  ): Promise<Wishlist> {
     return this.wishlistsService.updateWishlist(
       +id,
       updateWishlistDto,
@@ -57,7 +57,7 @@ export class WishlistsController {
 
   @Delete(':id')
   @UseGuards(JwtAuthGuard)
-  remove(@Param('id') id: number, @AuthUser() user: User) {
+  remove(@Param('id') id: number, @AuthUser() user: User): Promise<Wishlist> {
     return this.wishlistsService.removeWishlist(id, user.id);
   }
 }

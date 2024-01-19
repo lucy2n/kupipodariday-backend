@@ -24,11 +24,6 @@ export class UsersController {
     private readonly wishesService: WishesService,
   ) {}
 
-  // @Get()
-  // find() {
-  //   return this.usersService.findAll();
-  // }
-
   //Метод для получения авторизованного пользователя
   @Get('me')
   async findOwn(@AuthUser() user: User): Promise<User> {
@@ -80,18 +75,18 @@ export class UsersController {
   async updateOne(
     @AuthUser() user: User,
     @Body() updateUserDto: UpdateUserDto,
-  ) {
+  ): Promise<User> {
     const { id } = user;
     return this.usersService.update(id, updateUserDto);
   }
 
   @Post('find')
-  async findByQuery(@Body('query') query: string) {
+  async findByQuery(@Body('query') query: string): Promise<User[]> {
     return this.usersService.findMany({ query });
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id') id: string): Promise<void> {
     return this.usersService.remove(+id);
   }
 }

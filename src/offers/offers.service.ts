@@ -21,13 +21,13 @@ export class OffersService {
     const user = await this.userService.findById(userId);
     const wish = await this.wishService.findWishById(createOfferDto.itemId);
     const total = Number(wish.raised) + createOfferDto.amount;
+    if (user.id === wish.owner.id) {
+      throw new NotAcceptableException('Нельзя скинуть деньги на свой подарок');
+    }
     if (total > wish.price || wish.raised === wish.price) {
       throw new NotAcceptableException(
         'Сумма вложения превышает нужный остаток для покупки подарка или сумма уже набрана',
       );
-    }
-    if (user.id === wish.owner.id) {
-      throw new NotAcceptableException('Нельзя скинуть деньги на свой подарок');
     }
     await this.wishService.updateWish(
       wish.id,
