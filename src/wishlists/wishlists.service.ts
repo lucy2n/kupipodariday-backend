@@ -50,13 +50,17 @@ export class WishlistsService {
   }
 
   async findWishlistById(id: number): Promise<Wishlist> {
-    return await this.wishlistRepository.findOne({
+    const wishlist = await this.wishlistRepository.findOne({
       where: { id },
       relations: {
         owner: true,
         items: true,
       },
     });
+    if (!wishlist) {
+      throw new NotFoundException('Коллекция не найдена');
+    }
+    return wishlist;
   }
 
   async updateWishlist(
@@ -79,10 +83,12 @@ export class WishlistsService {
   async removeWishlist(id: number, userId: number) {
     const wishlist = await this.findWishlistById(id);
     if (!wishlist) {
-      throw new NotFoundException('Подарок не найден');
+      throw new NotFoundException('Коллекция не найдена');
     }
     if (userId !== wishlist.owner.id) {
-      throw new NotAcceptableException('Чужие подарки недоступны для удаления');
+      throw new NotAcceptableException(
+        'Чужие коллекции недоступны для редактирования',
+      );
     }
     return this.wishlistRepository.remove(wishlist);
   }

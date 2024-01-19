@@ -36,19 +36,10 @@ export class WishesController {
   }
 
   @Get(':id')
+  @UseGuards(JwtAuthGuard)
   async findWishById(@Param('id') id: number) {
     return this.wishesService.findWishById(id);
   }
-
-  // @Get()
-  // findAll() {
-  //   return this.wishesService.findAll();
-  // }
-
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   return this.wishesService.findOne(+id);
-  // }
 
   @Patch(':id')
   @UseGuards(JwtAuthGuard)

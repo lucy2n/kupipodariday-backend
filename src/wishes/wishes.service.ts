@@ -83,14 +83,14 @@ export class WishesService {
     if (!wish) {
       throw new NotFoundException('Подарок не найден');
     }
-    if (wish.raised > 0 && updateWishDto.price > 0) {
-      throw new NotAcceptableException(
-        'Нельзя изменить стоимость подарка, потому что уже есть желающие скинуться.',
-      );
-    }
     if (userId !== wish.owner.id) {
       throw new NotAcceptableException(
         'Чужие подарки недоступны для редактирования',
+      );
+    }
+    if (wish.raised > 0 && updateWishDto.price > 0) {
+      throw new NotAcceptableException(
+        'Нельзя изменить стоимость подарка, потому что уже есть желающие скинуться.',
       );
     }
     return this.wishRepository.save({ ...wish, ...updateWishDto });
