@@ -19,7 +19,8 @@
 
 
  ### 5. Конечно, можно отредактировать свой профиль
-<img width="1440" alt="image" src="https://github.com/lucy2n/kupipodariday-backend/assets/117926370/77f2cc30-69d3-46cc-88ed-ff9dc69fcc4e">
+<img width="1440" alt="image" src="https://github.com/lucy2n/kupipodariday-backend/assets/117926370/1de3b1aa-0fce-429e-b7e4-b6e4c9415fb8">
+
 
 
 
